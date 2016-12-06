@@ -10,11 +10,11 @@ I will create this projekt with config files, for minimal configurations.
 
 Example:
   
-  Monti.WriteLine("Hello, I currently in the first Line")
-  Monti.WriteLine("If the Second Line is empty, I am in the second Line")
-  Monti.WriteLine("")
-  Monti.WriteLine("Here in fourth Line")
-  Monti.WriteLine("Now i pushed the first Line up and I am sitting in the fourth Line")
+ - Monti.WriteLine("Hello, I currently in the first Line")
+ - Monti.WriteLine("If the Second Line is empty, I am in the second Line")
+ - Monti.WriteLine("")
+ - Monti.WriteLine("Here in fourth Line")
+ - Monti.WriteLine("Now i pushed the first Line up and I am sitting in the fourth Line")
   
   
   
