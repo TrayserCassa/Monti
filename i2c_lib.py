@@ -1,0 +1,3 @@
+﻿
+from time import *
+
