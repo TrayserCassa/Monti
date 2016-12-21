@@ -4,7 +4,7 @@ from time import *
 try:
    import smbus
 except ImportError as ex:
-   print(ex, "\n\nTry pip install smbus")
+   print(ex, "\n\nSmbus not installed!")
    sys.exit(1)
 
 # LCD Address
@@ -59,7 +59,7 @@ Rs = 0b00000001 # Register select bit
 class Lcd:
    #initializes objects and lcd
    def __init__(self):
-      self.lcd_device = i2c_lib.i2c_device(ADDRESS)
+      self.lcd_device = i2c_device(ADDRESS)
 
       self.lcd_write(0x03)
       self.lcd_write(0x03)
@@ -76,12 +76,16 @@ class Lcd:
       self.lcd_device.write_cmd(data | LCD_BACKLIGHT)
       self.lcd_strobe(data)
 
-   # write a command to lcd
    def lcd_write(self, cmd, mode=0):
       self.lcd_write_four_bits(mode | (cmd & 0xF0))
       self.lcd_write_four_bits(mode | ((cmd << 4) & 0xF0))
-      
-   #turn on/off the lcd backlight
+
+   def lcd_strobe(self, data):
+      self.lcd_device.write_cmd(data | En | LCD_BACKLIGHT)
+      sleep(.0005)
+      self.lcd_device.write_cmd(((data & ~En) | LCD_BACKLIGHT))
+      sleep(.0001)
+
    def backlight(self, state):
       if state in ("on","On","ON"):
          self.lcd_device.write_cmd(LCD_BACKLIGHT)
@@ -90,27 +94,33 @@ class Lcd:
       else:
          raise ValueError("Wrong State!")
 
-   # put string function
-   def print(self, string, line):
-      if line == 1:
-         self.lcd_write(0x80)
-      if line == 2:
-         self.lcd_write(0xC0)
-      if line == 3:
-         self.lcd_write(0x94)
-      if line == 4:
-         self.lcd_write(0xD4)
-
+   def write_line1(self, string):
+      self.lcd_write(0x80)
       for char in string:
          self.lcd_write(ord(char), Rs)
-
+    
+   def write_line2(self, string):
+      self.lcd_write(0xC0)
+      for char in string:
+         self.lcd_write(ord(char), Rs)
+    
+   def write_line3(self, string):
+      self.lcd_write(0x94)
+      for char in string:
+         self.lcd_write(ord(char), Rs)
+    
+   def write_line4(self, string):
+      self.lcd_write(0xD4)
+      for char in string:
+         self.lcd_write(ord(char), Rs)
+         
    # clear lcd and set to home
    def clear(self):
       self.lcd_write(LCD_CLEARDISPLAY)
       self.lcd_write(LCD_RETURNHOME)
 
 
-class i2c_Device:
+class i2c_device:
    def __init__(self, addr, port=1):
       self.addr = addr
       self.bus = smbus.SMBus(port)

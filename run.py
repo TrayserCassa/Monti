@@ -2,11 +2,11 @@ import Lcd
 from time import *
 
 lcd = Lcd.Lcd()
-lcd.lcd_clear()
+lcd.clear()
 
 sleep(5)
-lcd.lcd_backlight("off")
+lcd.backlight("off")
 sleep(5)
-lcd.lcd_backlight("on")
+lcd.backlight("on")
 
-lcd.mprint("Es Klappt Teil 2", 1)
+lcd.write_line1("Es Klappt Teil 2")
